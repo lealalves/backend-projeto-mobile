@@ -40,8 +40,8 @@ export default class MongoDB {
     return this._schema.create(item)
   }
 
-  listar(query = {}) {
-    return this._schema.find(query)
+  listar(query = {}, skip = 0, limit = 10) {
+    return this._schema.find(query).skip(skip).limit(limit)
   }
 
   atualizar(id, item){
