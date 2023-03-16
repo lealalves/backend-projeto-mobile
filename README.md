@@ -19,5 +19,4 @@ docker exec -it mongodb mongo --host localhost -u admin -p senhaadmin --authenti
 ```
 3 - Clone o repositório e de um `npm install`<br>.
 4 - Após instalar todos os módulos, execute os testes: `npm t`.<br>
-5 - Se for ficar testando as rotas, execute `npm run test:watch`, que assim ele mantém a conexão com o banco on.<br>
-6 - Não esqueça de ligar o Docker toda vez que for mexer com o backend!!
+5 - Não esqueça de ligar o Docker toda vez que for mexer com o backend!!
