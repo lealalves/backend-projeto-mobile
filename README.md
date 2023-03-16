@@ -17,3 +17,6 @@ docker run --name mongoclient -p 3000:3000 --link mongodb:mongodb -d mongoclient
 docker exec -it mongodb mongo --host localhost -u admin -p senhaadmin --authenticationDatabase admin 
 --eval "db.getSiblingDB('mundo-m').createUser({user: 'leallegal', pwd: 'secretcat', roles: [{role: 'readWrite', db: 'mundo-m'}]})"
 ```
+3 - Clone o repositório e de um `npm install`<br>
+4 - Após instalar todos os módulos, execute os testes: `npm t`.<br>
+5 - Se for ficar testando as rotas, execute `npm run test:watch`, que assim ele mantém a conexão com o banco on.
