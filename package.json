@@ -1,0 +1,17 @@
+{
+  "name": "mundom-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha src/tests/*test.js --exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mocha": "^10.2.0",
+    "mongoose": "^7.0.1"
+  }
+}
