@@ -63,6 +63,12 @@ describe('Suite de testes MongoDB', function() {
     deepEqual(result.cpf, MOCK_CADASTRAR_USUARIO.cpf)
   })
 
+  it('Deve retornar 3 usuarios', async () => {
+    const RESULT_LIMIT = 3
+    const result = await db.listar({}, 0, RESULT_LIMIT)
+    deepEqual(result.length, RESULT_LIMIT)
+  })
+
   it('Deve atualizar o cadastro de um usuario pelo id', async () => {
     const result = await db.atualizar(MOCK_ID_USUARIO, {
       nome: 'Vini Bobo'
