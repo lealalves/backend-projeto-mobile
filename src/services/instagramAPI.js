@@ -3,6 +3,21 @@ export default class InstagramApi {
     this._token = token
   }
 
+  async testApi() {
+    try {
+      const url = `https://graph.instagram.com/me/media?access_token=${this._token}`
+      const statusCode = (await fetch(url)).status
+
+      if(statusCode !== 200) return false
+
+      return true
+
+    } catch (error) {
+      console.log('DEU RUIM', error);
+      return 'Erro interno na API'
+    }
+  }
+
   async getPosts(skip = 0, limit = 10){
     try {
       const fields = 'caption,id,media_type,media_url,username,timestamp'
