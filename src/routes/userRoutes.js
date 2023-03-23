@@ -1,4 +1,4 @@
-import baseRoute from './base/baseRoute'
+import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
 
 const failAction = (request, headers, error) => {
@@ -20,7 +20,7 @@ export default class userRoutes extends baseRoute{
           query: Joi.object({
             limit: Joi.number().integer().default(10),
             skip: Joi.number().integer().default(0),
-            nome: Joi.string().min(3).max(100)
+            email: Joi.string().min(3).max(100)
           })
         }
       },handler: (request, headers) => {
@@ -28,20 +28,44 @@ export default class userRoutes extends baseRoute{
           const {
             limit,
             skip,
-            nome
+            email
           } = request.query
 
           let query = {
-            nome: {
-              $regex: `.*${nome}*.`, $options:'i'
+            email: {
+              $regex: `.*${email}*.`, $options:'i'
             }
           }
           
-          return this.db.listar(nome ? query : {}, skip, limit)    
+          return this.db.listar(email ? query : {}, skip, limit)    
 
         } catch (error) {
           console.log('DEU ERRO', error);
           return 'Erro interno no servidor.'
+        }
+      }
+    }
+  }
+  create() {
+    return {
+      path: '/users',
+      method: 'GET',
+      config: {
+        validate: {
+          failAction,
+          payload: Joi.object({
+            nome: Joi.string().required().min(3).max(100),
+            email: Joi.string().required().min(3).max(100),
+            cpf: Joi.string().required().min(11).max(14),
+            telefone: Joi.string().required().min(8).max(15)
+          })
+        }
+      }, handler: (request, headers) => {
+        try {
+          
+        } catch (error) {
+          console.log('DEU RUIM', error)
+          return 'Erro interno no servidor'
         }
       }
     }
