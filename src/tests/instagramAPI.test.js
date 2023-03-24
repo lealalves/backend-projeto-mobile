@@ -12,7 +12,7 @@ const MOCK_USERNAME_PROFILE = {
   username: 'leallealleal1'
 }
 
-describe('Suite de testes do serviço InstagramAPI', function() {
+describe('Suite de testes serviço InstagramAPI', function() {
   it('testApi() deve retornar TRUE', async () => {
     const result = await api.testApi()
     ok(result)

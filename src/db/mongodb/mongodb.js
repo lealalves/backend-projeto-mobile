@@ -31,7 +31,7 @@ export default class MongoDB {
     .catch(error => console.log('deu erro!', error))
 
     const connection = Mongoose.connection
-    connection.once('open', () => console.log('database rodando!'))
+    // connection.once('open', () => console.log('database rodando!'))
 
     return connection
   }

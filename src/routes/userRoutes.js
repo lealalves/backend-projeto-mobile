@@ -10,7 +10,45 @@ export default class userRoutes extends baseRoute{
     super()
     this.db = db
   }
-  list() {
+  create() {
+    return {
+      path: '/users',
+      method: 'POST',
+      config: {
+        validate: {
+          failAction,
+          payload: Joi.object({
+            nome: Joi.string().required().min(3).max(100),
+            email: Joi.string().required().min(3).max(100),
+            cpf: Joi.string().required().min(11).max(14),
+            telefone: Joi.string().required().min(8).max(15),
+            senha: Joi.string().required().min(4).max(15)
+          })
+        }
+      }, handler: async (request) => {
+        try {
+          const {
+            nome,
+            email,
+            cpf,
+            telefone,
+            senha
+          } = request.payload
+
+          const result = await this.db.cadastrar({nome, email, cpf, telefone, senha})
+
+          return {
+            message: 'Usuário cadastrado com sucesso!',
+            _id: result._id
+          }
+        } catch (error) {
+          console.log('DEU RUIM', error)
+          return 'Erro interno no servidor'
+        }
+      }
+    }
+  }
+  read() {
     return {
       path: '/users',
       method: 'GET',
@@ -46,25 +84,69 @@ export default class userRoutes extends baseRoute{
       }
     }
   }
-  create() {
+  update() {
     return {
-      path: '/users',
-      method: 'GET',
+      path: '/users/{id}',
+      method: 'PATCH',
       config: {
         validate: {
           failAction,
+          params: Joi.object({
+            id: Joi.string().required().max(50)
+          }),
           payload: Joi.object({
-            nome: Joi.string().required().min(3).max(100),
-            email: Joi.string().required().min(3).max(100),
-            cpf: Joi.string().required().min(11).max(14),
-            telefone: Joi.string().required().min(8).max(15)
-          })
+            nome: Joi.string().min(3).max(100),
+            email: Joi.string().min(3).max(100),
+            cpf: Joi.string().min(11).max(14),
+            telefone: Joi.string().min(8).max(15),
+            senha: Joi.string().min(4).max(15)
+          }).options({ stripUnknown: true })
         }
-      }, handler: (request, headers) => {
+      }, handler: async (request) => {
         try {
+          const id = request.params.id
+          const dados = request.payload
+
+          const result = await this.db.atualizar(id, dados)
+  
+          if(result.modifiedCount !== 1) return {message: 'Não foi possível atualizar!'}
+          
+          return {
+            message: 'Usuário atualizado com sucesso!',
+          }
           
         } catch (error) {
           console.log('DEU RUIM', error)
+          return 'Erro interno no servidor'
+        }
+      }
+    }
+  }
+  delete() {
+    return {
+      path: '/users/{id}',
+      method: 'DELETE',
+      config: {
+        validate: {
+          failAction,
+          params: Joi.object({
+            id: Joi.string().required().max(50)
+          })
+        }
+      }, handler: async (request) => {
+        try {
+          const id = request.params.id
+
+          const result = await this.db.deletar(id)
+
+          if(result.deletedCount !== 1) return {message: 'Não foi possivel deletar!'}
+
+          return {
+            message: 'Usuário deletado com sucesso!',
+          }
+          
+        } catch (error) {
+          console.log('DEU RUIM', error);
           return 'Erro interno no servidor'
         }
       }

@@ -5,14 +5,36 @@ let app = {}
 
 const MOCK_CADASTRAR_USUARIO = {
   nome: 'Leal Lindo',
-  email: 'leealalves@hotmail.com',
+  email: `leealalves@hotmail.com-${Date.now()}`,
   cpf: '12312312312',
   telefone: '13997654321',
+  senha: '123123123'
 }
 
-describe.only('Suite de testes API', function () {
+const MOCK_DEFAULT_USUARIO = {
+  nome: 'Leal Lindo',
+  email: `vinileal@hotmail.com-${Date.now()}`,
+  cpf: '12312312312',
+  telefone: '13997654321',
+  senha: '123123123'
+}
+
+const MOCK_DELETED_ID = '641140b1527a6ede09dce934'
+
+let MOCK_USER_ID = ''
+
+describe('Suite de testes rotas usuário', function () {
   this.beforeAll(async () => {
     app = await api
+    const result = await app.inject({
+      method: 'POST',
+      url: '/users',
+      payload: MOCK_DEFAULT_USUARIO
+    })
+
+    const { _id } = JSON.parse(result.payload)
+
+    MOCK_USER_ID = _id
   })
 
   it('GET /users - deve retornar um array de usuarios', async () => {
@@ -118,4 +140,75 @@ describe.only('Suite de testes API', function () {
     deepEqual(message, 'Usuário cadastrado com sucesso!')
   })
 
+  it('PATCH /users/:id - Deve atualizar um usuario pelo id', async () => {
+    const MOCK_NOVO_NOME = {
+      nome: 'Alves Leal'
+    }
+
+    const result = await app.inject({
+      method: 'PATCH',
+      url: `/users/${MOCK_USER_ID}`,
+      payload: MOCK_NOVO_NOME
+    })
+
+    const statusCode = result.statusCode
+    const {
+      message,
+    } = JSON.parse(result.payload)
+
+    ok(statusCode === 200)
+    deepEqual(message, 'Usuário atualizado com sucesso!')
+  })
+
+  it('PATCH /users/:id - Não deve atualizar um usuario pelo id incorreto', async () => {
+    const MOCK_NOVO_NOME = {
+      nome: 'Alves Leal'
+    }
+    
+    const result = await app.inject({
+      method: 'PATCH',
+      url: `/users/${MOCK_DELETED_ID}`,
+      payload: MOCK_NOVO_NOME
+    })
+
+    const statusCode = result.statusCode
+    const {
+      message,
+    } = JSON.parse(result.payload)
+
+    ok(statusCode === 200)
+    deepEqual(message, 'Não foi possível atualizar!')
+  })
+
+  it('DELETE /users/:id - Deve deletar um usuario pelo id', async () => {
+    const result = await app.inject({
+      method: 'DELETE',
+      url: `/users/${MOCK_USER_ID}`
+    })
+
+    const statusCode = result.statusCode
+    const {
+      message,
+      deletedCount
+    } = JSON.parse(result.payload)
+
+    ok(statusCode === 200)
+    deepEqual(message, 'Usuário deletado com sucesso!')
+  })
+
+  it('DELETE /users/:id - Não deve deletar um usuario pelo id incorreto', async () => {
+    const result = await app.inject({
+      method: 'DELETE',
+      url: `/users/${MOCK_DELETED_ID}`
+    })
+
+    const statusCode = result.statusCode
+    const {
+      message,
+      deletedCount
+    } = JSON.parse(result.payload)
+
+    ok(statusCode === 200)
+    deepEqual(message, 'Não foi possivel deletar!')
+  })
 })
