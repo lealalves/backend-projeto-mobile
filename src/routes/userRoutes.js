@@ -1,5 +1,6 @@
 import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
+import Boom from '@hapi/boom'
 
 const failAction = (request, headers, error) => {
   throw error
@@ -45,8 +46,8 @@ export default class userRoutes extends baseRoute{
             _id: result._id
           }
         } catch (error) {
-          console.log('DEU RUIM', error)
-          return 'Erro interno no servidor'
+          // console.log('DEU RUIM', error)
+          return Boom.internal()
         }
       }
     }
@@ -84,8 +85,8 @@ export default class userRoutes extends baseRoute{
           return this.db.listar(email ? query : {}, skip, limit)    
 
         } catch (error) {
-          console.log('DEU ERRO', error);
-          return 'Erro interno no servidor.'
+          // console.log('DEU ERRO', error);
+          return Boom.internal()
         }
       }
     }
@@ -118,15 +119,15 @@ export default class userRoutes extends baseRoute{
 
           const result = await this.db.atualizar(id, dados)
   
-          if(result.modifiedCount !== 1) return {message: 'Não foi possível atualizar!'}
+          if(result.modifiedCount !== 1) return Boom.preconditionFailed('ID não encontrado no banco!')
           
           return {
             message: 'Usuário atualizado com sucesso!',
           }
           
         } catch (error) {
-          console.log('DEU RUIM', error)
-          return 'Erro interno no servidor'
+          // console.log('DEU RUIM', error)
+          return Boom.internal()
         }
       }
     }
@@ -151,15 +152,15 @@ export default class userRoutes extends baseRoute{
 
           const result = await this.db.deletar(id)
 
-          if(result.deletedCount !== 1) return {message: 'Não foi possivel deletar!'}
+          if(result.deletedCount !== 1) return Boom.preconditionFailed('ID não encontrado no banco!')
 
           return {
             message: 'Usuário deletado com sucesso!',
           }
           
         } catch (error) {
-          console.log('DEU RUIM', error);
-          return 'Erro interno no servidor'
+          // console.log('DEU RUIM', error);
+          return Boom.internal()
         }
       }
     }
