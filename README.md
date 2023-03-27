@@ -1,4 +1,4 @@
-# Backend do App API Instagram
+# Backend Projeto App Mobile
 
 Projeto para por em prática todo aprendizado em Node.js.
 
