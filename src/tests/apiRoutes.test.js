@@ -109,17 +109,17 @@ describe('Suite de testes rotas usuário', function () {
   })
 
   it('GET /users - deve filtrar um usuario pelo email', async () => {
-    const MOCK_EMAIL = 'leal@outlook.com--1678852977592'
+    const EMAIL = MOCK_DEFAULT_USUARIO.email
     const result = await app.inject({
       method: 'GET',
-      url: `/users?email=${MOCK_EMAIL}`
+      url: `/users?email=${EMAIL}`
     })
 
     const dados = JSON.parse(result.payload)
     const statusCode = result.statusCode
 
     ok(statusCode === 200)
-    deepEqual(dados[0].email, MOCK_EMAIL)
+    deepEqual(dados[0].email, EMAIL)
   })
 
   it('POST /users - deve cadastrar um usuario', async () => {
