@@ -160,7 +160,7 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(message, 'Usuário atualizado com sucesso!')
   })
 
-  it('PATCH /users/:id - Não deve atualizar um usuario pelo id incorreto', async () => {
+  it('PATCH /users/:id - Não deve atualizar um usuario pelo id inexistente', async () => {
     const MOCK_NOVO_NOME = {
       nome: 'Alves Leal'
     }
@@ -170,14 +170,41 @@ describe('Suite de testes rotas usuário', function () {
       url: `/users/${MOCK_DELETED_ID}`,
       payload: MOCK_NOVO_NOME
     })
-
+    
+    const expectedError = {
+      statusCode: 412,
+      error: 'Precondition Failed',
+      message: 'ID não encontrado no banco!'
+    }
     const statusCode = result.statusCode
-    const {
-      message,
-    } = JSON.parse(result.payload)
+    const dados = JSON.parse(result.payload)
 
-    ok(statusCode === 200)
-    deepEqual(message, 'Não foi possível atualizar!')
+    ok(statusCode === 412)
+    deepEqual(dados, expectedError)
+  })
+
+  it('PATCH /users/:id - Não deve atualizar um usuario pelo id inválido', async () => {
+    const MOCK_INVALID_ID = '_id'
+    const MOCK_NOVO_NOME = {
+      nome: 'Alves Leal'
+    }
+    
+    const result = await app.inject({
+      method: 'PATCH',
+      url: `/users/${MOCK_INVALID_ID}`,
+      payload: MOCK_NOVO_NOME
+    })
+    
+    const expectedError = {
+      statusCode: 500,
+      error: 'Internal Server Error',
+      message: 'An internal server error occurred'
+    } 
+    const statusCode = result.statusCode
+    const dados = JSON.parse(result.payload)
+
+    ok(statusCode === 500)
+    deepEqual(dados, expectedError)
   })
 
   it('DELETE /users/:id - Deve deletar um usuario pelo id', async () => {
@@ -196,19 +223,40 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(message, 'Usuário deletado com sucesso!')
   })
 
-  it('DELETE /users/:id - Não deve deletar um usuario pelo id incorreto', async () => {
+  it('DELETE /users/:id - Não deve deletar um usuario por um id inexistente', async () => {
     const result = await app.inject({
       method: 'DELETE',
       url: `/users/${MOCK_DELETED_ID}`
     })
 
+    const expectedError = {
+      statusCode: 412,
+      error: 'Precondition Failed',
+      message: 'ID não encontrado no banco!'
+    } 
     const statusCode = result.statusCode
-    const {
-      message,
-      deletedCount
-    } = JSON.parse(result.payload)
+    const dados = JSON.parse(result.payload)
 
-    ok(statusCode === 200)
-    deepEqual(message, 'Não foi possivel deletar!')
+    ok(statusCode === 412)
+    deepEqual(dados, expectedError)
+  })
+
+  it('DELETE /users/:id - Não deve deletar um usuario por um id inválido', async () => {
+    const MOCK_INVALID_ID = '_id'
+    const result = await app.inject({
+      method: 'DELETE',
+      url: `/users/${MOCK_INVALID_ID}`
+    })
+
+    const expectedError = {
+      statusCode: 500,
+      error: 'Internal Server Error',
+      message: 'An internal server error occurred'
+    } 
+    const statusCode = result.statusCode
+    const dados = JSON.parse(result.payload)
+
+    ok(statusCode === 500)
+    deepEqual(dados, expectedError)
   })
 })
