@@ -15,6 +15,9 @@ export default class userRoutes extends baseRoute{
       path: '/users',
       method: 'POST',
       config: {
+        description: 'Deve cadastrar um usuário',
+        notes: 'cadastrar um usuário usando nome, email, cpf, telefone e a senha.',
+        tags: ['api'],
         validate: {
           failAction,
           payload: Joi.object({
@@ -53,6 +56,9 @@ export default class userRoutes extends baseRoute{
       path: '/users',
       method: 'GET',
       config: {
+        description: 'Deve retornar uma lista de usuários',
+        notes: 'pode paginar resultados e filtrar por email.',
+        tags: ['api'],
         validate: {
           failAction,
           query: Joi.object({
@@ -89,6 +95,9 @@ export default class userRoutes extends baseRoute{
       path: '/users/{id}',
       method: 'PATCH',
       config: {
+        description: 'Deve atualizar um usuário pelo ID',
+        notes: 'pode atualizar qualquer informação de um usuário pelo id.',
+        tags: ['api'],
         validate: {
           failAction,
           params: Joi.object({
@@ -127,6 +136,9 @@ export default class userRoutes extends baseRoute{
       path: '/users/{id}',
       method: 'DELETE',
       config: {
+        description: 'Deve remover um usuário pelo ID',
+        notes: 'remove um usuario',
+        tags: ['api'],
         validate: {
           failAction,
           params: Joi.object({

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha src/tests/*test.js --exit",
+    "test:on": "mocha src/tests/*test.js",
     "test:watch": "mocha src/tests/*test.js -w"
   },
   "keywords": [],
@@ -13,7 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^21.3.0",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/vision": "^7.0.1",
     "dotenv": "^16.0.3",
+    "hapi-swagger": "^16.0.1",
     "joi": "^17.9.1",
     "mocha": "^10.2.0",
     "mongoose": "^7.0.1"
