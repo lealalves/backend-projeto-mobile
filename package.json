@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha src/tests/*test.js --exit",
-    "test:on": "mocha src/tests/*test.js",
-    "test:watch": "mocha src/tests/*test.js -w"
+    "test:on": "mocha src/tests/*test.js"
   },
   "keywords": [],
   "author": "",
