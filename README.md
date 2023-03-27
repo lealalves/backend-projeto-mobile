@@ -5,6 +5,8 @@ Projeto para por em prática todo aprendizado em Node.js.
 A ideia é desenvolver um aplicativo mobile para uma loja de roupas da nossa região. O diferencial seria importar postagens do Instagram e 
 utilizar para mostrar no aplicativo os produtos disponíveis.
 
+Até o momento, a API conta com um CRUD para usuários.
+
 # Tecnologias utilizadas
 - Hapi.js para criação de toda API
 - @Hapi/Joi para validação das rotas
