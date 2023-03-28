@@ -31,7 +31,7 @@ docker run --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e 
 ```
 docker run --name mongoclient -p 3000:3000 --link mongodb:mongodb -d mongoclient/mongoclient
 ```
-*Criando um container que vai ser a interface para utilizar o container criado anteriormente*
+*Criando um container para a porta 3000 que vai ser a interface para utilizar o container criado anteriormente*
 ```
 docker exec -it mongodb mongo --host localhost -u admin -p senhaadmin --authenticationDatabase admin 
 --eval "db.getSiblingDB('mundo-m').createUser({user: 'leallegal', pwd: 'secretcat', roles: [{role: 'readWrite', db: 'mundo-m'}]})"
