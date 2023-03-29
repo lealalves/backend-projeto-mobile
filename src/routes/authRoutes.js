@@ -2,20 +2,18 @@ import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
 import Boom from '@hapi/boom'
 import Jwt  from 'jsonwebtoken'
+import passwordHelper from '../helpers/passwordHelper.js'
+
 
 const failAction = (request, headers, error) => {
   throw error
 }
 
-const USER = {
-  username: 'leal',
-  password: '123'
-}
-
 export default class authRoutes extends baseRoute {
-  constructor(secret) {
+  constructor(secret, db) {
     super()
     this.secret = secret
+    this.db = db
   }
 
   login() {
@@ -30,22 +28,38 @@ export default class authRoutes extends baseRoute {
         validate: {
           failAction,
           payload: Joi.object({
-            username: Joi.string().required(),
+            email: Joi.string().required(),
             password: Joi.string().required()
           })
         }
       }, handler: async (request, headers) => {
-        const { username, password } = request.payload
+        try {
+          const { 
+            email, 
+            password 
+          } = request.payload
+  
+          const [usuario] = await this.db.listar({
+            email: email.toLowerCase()
+          })
+  
+          if(!usuario) return Boom.unauthorized('Usuário não encontrado!')
 
-        if(username.toLowerCase() !== USER.username || password !== USER.password) return Boom.unauthorized()
-
-        const token = Jwt.sign({
-          username: username,
-          id: 1
-        }, this.secret)
-
-        return {
-          token
+          const match = await passwordHelper.comparePassword(password, usuario.senha)
+  
+          if(!match) return Boom.unauthorized('Usuário ou senha inválida')
+  
+          const token = Jwt.sign({
+            nome: usuario.nome,
+            id: usuario._id
+          }, this.secret)
+  
+          return {
+            token
+          }          
+        } catch (error) {
+          console.log('DEU RUIM', error);
+          return Boom.internal()
         }
       }
     }
