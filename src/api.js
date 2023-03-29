@@ -60,6 +60,7 @@ async function main() {
     //   expiresIn: 20
     // },
     validate: (dados, request, h) => {
+      // aqui posso fazer alguma validação a respeito do usuario
       console.log('dados', dados);
       return {
         isValid: true
@@ -77,7 +78,7 @@ async function main() {
   )
 
   app.start()
-  console.log('Servidor rodando na porta', app.info.port);
+  console.log('Servidor rodando na porta:', app.info.port);
 
   return app
 }
