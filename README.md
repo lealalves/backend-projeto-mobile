@@ -15,6 +15,7 @@ Até o momento, a API conta com:
 - @Hapi/Swagger para a documentação
 - @Hapi/Boom para tratamento de erros
 - JsonWebToken para autenticação
+- Bcrypt para gerar senhas
 - Mocha e recursos nativos do Node.js para testes unitários e de integração
 - MongoDB + Mongoose
 - Docker
