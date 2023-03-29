@@ -1,19 +1,23 @@
 import * as dotenv from 'dotenv'
-dotenv.config({path: '../.env'})
+dotenv.config()
 
 import Hapi from '@hapi/hapi'
 import HapiSwagger from 'hapi-swagger'
 import Vision from '@hapi/vision'
 import Inert from '@hapi/inert'
-
 import MongoDB from './db/mongodb/mongodb.js'
+import HapiJwt from 'hapi-auth-jwt2'
+
 import userSchema from './db/mongodb/schemas/userSchema.js'
 import userRoutes from './routes/userRoutes.js'
+
+import authRoutes from './routes/authRoutes.js'
 
 import instagramAPI from './services/instagramAPI.js'
 import serviceRoutes from './routes/serviceRoutes.js'
 
 const INSTA_TOKEN = process.env.TOKEN_INSTAGRAM
+const JWT_SECRET = process.env.TOKEN_JWT
 
 const app = new Hapi.server({
   port: 5000,
@@ -41,6 +45,7 @@ async function main() {
     }
   }
   await app.register([
+    HapiJwt,
     Inert,
     Vision,
     {
@@ -49,9 +54,27 @@ async function main() {
     }    
   ])
 
+  app.auth.strategy('jwt', 'jwt', {
+    key: JWT_SECRET,
+    // options: {
+    //   expiresIn: 20
+    // },
+    validate: (dado, request) => {
+      // verifica no banco se o usuario continua ativo
+      // verifica se o usuario continua pagando
+
+      return {
+        isValid: true
+      }
+    }
+  })
+
+  app.auth.default('jwt')
+
   app.route([
     ...mapRoutes(new userRoutes(context), userRoutes.methods()),
-    ...mapRoutes(new serviceRoutes(api), serviceRoutes.methods())
+    ...mapRoutes(new serviceRoutes(api), serviceRoutes.methods()),
+    ...mapRoutes(new authRoutes(JWT_SECRET), authRoutes.methods())
     ]
   )
 
