@@ -6,6 +6,10 @@ const failAction = (request, headers, error) => {
   throw error
 }
 
+const headers = Joi.object({
+  authorization: Joi.string().required()
+}).unknown()
+
 export default class userRoutes extends baseRoute{
   constructor(db){
     super()
@@ -16,6 +20,7 @@ export default class userRoutes extends baseRoute{
       path: '/users',
       method: 'POST',
       config: {
+        auth: false,
         description: 'Deve cadastrar um usuário',
         notes: 'cadastrar um usuário usando nome, email, cpf, telefone e a senha.',
         tags: ['api'],
@@ -62,6 +67,7 @@ export default class userRoutes extends baseRoute{
         tags: ['api'],
         validate: {
           failAction,
+          headers,
           query: Joi.object({
             limit: Joi.number().integer().default(10),
             skip: Joi.number().integer().default(0),
@@ -101,6 +107,7 @@ export default class userRoutes extends baseRoute{
         tags: ['api'],
         validate: {
           failAction,
+          headers,
           params: Joi.object({
             id: Joi.string().required().max(50)
           }),
@@ -142,6 +149,7 @@ export default class userRoutes extends baseRoute{
         tags: ['api'],
         validate: {
           failAction,
+          headers,
           params: Joi.object({
             id: Joi.string().required().max(50)
           })

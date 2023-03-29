@@ -3,6 +3,12 @@ import api from '../api.js'
 
 let app = {}
 
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxlYWwiLCJpZCI6MSwiaWF0IjoxNjgwMDYwMjM4fQ.-vXkAiuAKRPyoNVBWWZcAj8yLWpYoJIvKqinVjUoxj8'
+
+const headers = {
+  Authorization: TOKEN
+}
+
 const MOCK_CADASTRAR_USUARIO = {
   nome: 'Leal Lindo',
   email: `leealalves@hotmail.com-${Date.now()}`,
@@ -23,7 +29,7 @@ const MOCK_DELETED_ID = '641140b1527a6ede09dce934'
 
 let MOCK_USER_ID = ''
 
-describe('Suite de testes rotas usuário', function () {
+describe.only('Suite de testes rotas usuário', function () {
   this.beforeAll(async () => {
     app = await api
     const result = await app.inject({
@@ -40,6 +46,7 @@ describe('Suite de testes rotas usuário', function () {
   it('GET /users - deve retornar um array de usuarios', async () => {
     const result = await app.inject({
       method: 'GET',
+      headers,
       url: '/users'
     })
 
@@ -54,6 +61,7 @@ describe('Suite de testes rotas usuário', function () {
     const TAMANHO_LIMITE = 3
     const result = await app.inject({
       method: 'GET',
+      headers,
       url: `/users?limit=${TAMANHO_LIMITE}`
     })
 
@@ -68,6 +76,7 @@ describe('Suite de testes rotas usuário', function () {
     const TAMANHO_LIMITE = 'OIE'
     const result = await app.inject({
       method: 'GET',
+      headers,
       url: `/users?limit=${TAMANHO_LIMITE}`
     })
 
@@ -90,6 +99,7 @@ describe('Suite de testes rotas usuário', function () {
     const TAMANHO_SKIP = 'OIE'
     const result = await app.inject({
       method: 'GET',
+      headers,
       url: `/users?skip=${TAMANHO_SKIP}`
     })
 
@@ -112,6 +122,7 @@ describe('Suite de testes rotas usuário', function () {
     const EMAIL = MOCK_DEFAULT_USUARIO.email
     const result = await app.inject({
       method: 'GET',
+      headers,
       url: `/users?email=${EMAIL}`
     })
 
@@ -147,6 +158,7 @@ describe('Suite de testes rotas usuário', function () {
 
     const result = await app.inject({
       method: 'PATCH',
+      headers,
       url: `/users/${MOCK_USER_ID}`,
       payload: MOCK_NOVO_NOME
     })
@@ -167,6 +179,7 @@ describe('Suite de testes rotas usuário', function () {
     
     const result = await app.inject({
       method: 'PATCH',
+      headers,
       url: `/users/${MOCK_DELETED_ID}`,
       payload: MOCK_NOVO_NOME
     })
@@ -191,6 +204,7 @@ describe('Suite de testes rotas usuário', function () {
     
     const result = await app.inject({
       method: 'PATCH',
+      headers,
       url: `/users/${MOCK_INVALID_ID}`,
       payload: MOCK_NOVO_NOME
     })
@@ -210,6 +224,7 @@ describe('Suite de testes rotas usuário', function () {
   it('DELETE /users/:id - Deve deletar um usuario pelo id', async () => {
     const result = await app.inject({
       method: 'DELETE',
+      headers,
       url: `/users/${MOCK_USER_ID}`
     })
 
@@ -226,6 +241,7 @@ describe('Suite de testes rotas usuário', function () {
   it('DELETE /users/:id - Não deve deletar um usuario por um id inexistente', async () => {
     const result = await app.inject({
       method: 'DELETE',
+      headers,
       url: `/users/${MOCK_DELETED_ID}`
     })
 
@@ -245,6 +261,7 @@ describe('Suite de testes rotas usuário', function () {
     const MOCK_INVALID_ID = '_id'
     const result = await app.inject({
       method: 'DELETE',
+      headers,
       url: `/users/${MOCK_INVALID_ID}`
     })
 
