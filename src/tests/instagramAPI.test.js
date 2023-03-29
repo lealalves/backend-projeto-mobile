@@ -12,7 +12,7 @@ const MOCK_USERNAME_PROFILE = {
   username: 'leallealleal1'
 }
 
-describe('Suite de testes serviço InstagramAPI', function() {
+describe.only('Suite de testes serviço InstagramAPI', function() {
   it('testApi() deve retornar TRUE', async () => {
     const result = await api.testApi()
     ok(result)
@@ -20,16 +20,22 @@ describe('Suite de testes serviço InstagramAPI', function() {
 
   it('getPosts() deve retornar um array', async () => {
     const result = await api.getPosts()
-    ok(Array.isArray(result))
+    const dados = (await result.json()).data
+
+    ok(Array.isArray(dados))
   })
 
   it('getPosts() deve retornar o nome de usuário', async () => {
-    const [{ username }] = await api.getPosts()
+    const result = await api.getPosts()
+    const [{ username }] = (await result.json()).data
+
     deepEqual(username, MOCK_USERNAME_PROFILE.username)
   })
 
   it('getPosts() deve retornar URL e Legenda da publicação', async () => {
-    const [{ caption, media_url }] = await api.getPosts()
+    const result = await api.getPosts()
+    const [{ caption, media_url }] = (await result.json()).data
+
 
     notDeepStrictEqual(caption, undefined)
     notDeepStrictEqual(media_url, undefined)
