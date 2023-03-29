@@ -9,7 +9,7 @@ const token = process.env.TOKEN_INSTAGRAM
 const api = new InstagramApi(token)
 
 const MOCK_USERNAME_PROFILE = {
-  username: 'leallealleal1'
+  username: process.env.USERNAME_INSTAGRAM
 }
 
 describe('Suite de testes serviço InstagramAPI', function() {
