@@ -1,6 +1,7 @@
 import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
 import Boom from '@hapi/boom'
+import passwordHelper from '../helpers/passwordHelper.js'
 
 const failAction = (request, headers, error) => {
   throw error
@@ -44,14 +45,15 @@ export default class userRoutes extends baseRoute{
             senha
           } = request.payload
 
-          const result = await this.db.cadastrar({nome, email, cpf, telefone, senha})
+          const novaSenha = await passwordHelper.hashPassword(senha)
+
+          const result = await this.db.cadastrar({nome, email, cpf, telefone, senha: novaSenha})
 
           return {
             message: 'Usuário cadastrado com sucesso!',
             _id: result._id
           }
         } catch (error) {
-          // console.log('DEU RUIM', error)
           return Boom.internal()
         }
       }
@@ -91,7 +93,6 @@ export default class userRoutes extends baseRoute{
           return this.db.listar(email ? query : {}, skip, limit)    
 
         } catch (error) {
-          // console.log('DEU ERRO', error);
           return Boom.internal()
         }
       }
@@ -133,7 +134,6 @@ export default class userRoutes extends baseRoute{
           }
           
         } catch (error) {
-          // console.log('DEU RUIM', error)
           return Boom.internal()
         }
       }
@@ -167,7 +167,6 @@ export default class userRoutes extends baseRoute{
           }
           
         } catch (error) {
-          // console.log('DEU RUIM', error);
           return Boom.internal()
         }
       }
