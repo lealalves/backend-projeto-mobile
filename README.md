@@ -5,7 +5,9 @@ Projeto para por em prática todo aprendizado em Node.js.
 A ideia é desenvolver um aplicativo mobile para uma loja de roupas da nossa região. O diferencial seria importar postagens do Instagram e 
 utilizar para mostrar no aplicativo os produtos disponíveis.
 
-Até o momento, a API conta com um CRUD para usuários.
+Até o momento, a API conta com:
+- Rotas CRUD de usuários;
+- Rota para obter posts do Instagram.
 
 # Tecnologias utilizadas
 - Hapi.js para criação de toda API
@@ -31,7 +33,7 @@ docker run --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e 
 ```
 docker run --name mongoclient -p 3000:3000 --link mongodb:mongodb -d mongoclient/mongoclient
 ```
-*Criando um container que vai ser a interface para utilizar o container criado anteriormente*
+*Criando um container para a porta 3000 que vai ser a interface para utilizar o container criado anteriormente*
 ```
 docker exec -it mongodb mongo --host localhost -u admin -p senhaadmin --authenticationDatabase admin 
 --eval "db.getSiblingDB('mundo-m').createUser({user: 'leallegal', pwd: 'secretcat', roles: [{role: 'readWrite', db: 'mundo-m'}]})"
