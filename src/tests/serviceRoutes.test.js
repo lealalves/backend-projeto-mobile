@@ -3,7 +3,7 @@ import api from '../api.js'
 
 let app = {}
 
-describe.only('Suite de testes serviços InstagramApi', function () {
+describe('Suite de testes serviços', function () {
   this.beforeAll(async () => {
     app = await api
   })
