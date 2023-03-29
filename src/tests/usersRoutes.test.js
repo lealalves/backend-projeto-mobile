@@ -29,7 +29,7 @@ const MOCK_DELETED_ID = '641140b1527a6ede09dce934'
 
 let MOCK_USER_ID = ''
 
-describe.only('Suite de testes rotas usuário', function () {
+describe('Suite de testes rotas usuário', function () {
   this.beforeAll(async () => {
     app = await api
     const result = await app.inject({
@@ -276,4 +276,5 @@ describe.only('Suite de testes rotas usuário', function () {
     ok(statusCode === 500)
     deepEqual(dados, expectedError)
   })
+
 })

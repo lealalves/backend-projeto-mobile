@@ -59,10 +59,8 @@ async function main() {
     // options: {
     //   expiresIn: 20
     // },
-    validate: (dado, request) => {
-      // verifica no banco se o usuario continua ativo
-      // verifica se o usuario continua pagando
-
+    validate: (dados, request, h) => {
+      console.log('dados', dados);
       return {
         isValid: true
       }
@@ -74,7 +72,7 @@ async function main() {
   app.route([
     ...mapRoutes(new userRoutes(context), userRoutes.methods()),
     ...mapRoutes(new serviceRoutes(api), serviceRoutes.methods()),
-    ...mapRoutes(new authRoutes(JWT_SECRET), authRoutes.methods())
+    ...mapRoutes(new authRoutes(JWT_SECRET, context), authRoutes.methods())
     ]
   )
 

@@ -6,6 +6,10 @@ const failAction = (request, headers, error) => {
   throw error
 }
 
+const headers = Joi.object({
+  authorization: Joi.string().required()
+}).unknown()
+
 export default class serviceRoutes extends baseRoute {
   constructor(api) {
     super()
@@ -16,12 +20,12 @@ export default class serviceRoutes extends baseRoute {
       path: '/services/instagram_posts',
       method: 'GET',
       config: {
-        auth: false,
         description: 'Deve retonar uma lista de posts do instagram.',
         notes: 'retorna um array com as postagens do perfil alvo',
         tags: ['api'],
         validate: {
           failAction,
+          headers,
           query: Joi.object({
             limit: Joi.number().integer().default(10),
             skip: Joi.number().integer().default(0),
@@ -44,7 +48,7 @@ export default class serviceRoutes extends baseRoute {
           return dados.slice(skip, limit)
         } catch (error) {
           console.log('DEU RUIM', error);
-          Boom.internal()
+          return Boom.internal()
         }
       }
     }
