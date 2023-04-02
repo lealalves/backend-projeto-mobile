@@ -21,12 +21,11 @@ const JWT_SECRET = process.env.TOKEN_JWT
 
 const app = new Hapi.server({
   port: 5000,
-  routes: {
-    cors: {
-      origin: ['*'],
-      credentials: true
-    }
-  }
+  // routes: {
+  //   cors: {
+  //     origin: ['*'],
+  //   }
+  // }
 })
 
 function mapRoutes(instance, methods){
@@ -61,7 +60,7 @@ async function main() {
     // },
     validate: (dados, request, h) => {
       // aqui posso fazer alguma validação a respeito do usuario
-      console.log('dados', dados);
+      console.log('dados', dados)
       return {
         isValid: true
       }
