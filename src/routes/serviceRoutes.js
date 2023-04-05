@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+import Jwt  from 'jsonwebtoken'
 import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
 import Boom from '@hapi/boom'
@@ -9,6 +13,8 @@ const failAction = (request, headers, error) => {
 const headers = Joi.object({
   authorization: Joi.string().required()
 }).unknown()
+
+const JWT_SECRET = process.env.TOKEN_JWT
 
 export default class serviceRoutes extends baseRoute {
   constructor(api) {
@@ -34,6 +40,14 @@ export default class serviceRoutes extends baseRoute {
       },
       handler: async (request, headers) => {
         try {
+          const token = request.headers.authorization.split('Bearer')[1]
+          const tokenInfo = await Jwt.verify(token, JWT_SECRET, function(err, decoded) {
+            if(err) throw Error('DEU RUIM NO TOKEN')
+            return {
+              ...decoded
+            }
+          });
+
           const { 
             skip, 
             limit 
@@ -44,8 +58,11 @@ export default class serviceRoutes extends baseRoute {
           if(result.status !== 200) return Boom.internal()
 
           const dados = (await result.json()).data
-
-          return dados.slice(skip, limit)
+          const dadosSlice = dados.slice(skip, limit)
+          return {
+            dadosSlice,
+            tokenInfo
+          }
         } catch (error) {
           console.log('DEU RUIM', error);
           return Boom.internal()
