@@ -1,9 +1,9 @@
-import { deepEqual, notDeepStrictEqual,ok } from 'node:assert'
+import { deepEqual, notDeepStrictEqual, ok } from 'node:assert'
 import api from '../api.js'
 
 let app = {}
 
-const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxlYWwiLCJpZCI6MSwiaWF0IjoxNjgwMDYwMjM4fQ.-vXkAiuAKRPyoNVBWWZcAj8yLWpYoJIvKqinVjUoxj8'
+const TOKEN = 'BearereyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiemlraW5oYSIsImlkIjoiNjQzZDdkY2M3YmNmOWYzY2E1OWIzODY3IiwiaWF0IjoxNjgxNzUxNTE3fQ.xdU53gZabCIy8Jj7aOH-kYqkGJiWmTzrALvMXxe-Yhk'
 
 const headers = {
   Authorization: TOKEN
@@ -22,8 +22,7 @@ describe('Suite de testes serviços', function () {
     })
 
     const dados = JSON.parse(result.payload)
-
     ok(result.statusCode === 200)
-    ok(Array.isArray(dados))
+    ok(Array.isArray(dados.dadosSlice))
   })
 })

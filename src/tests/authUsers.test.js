@@ -1,11 +1,11 @@
-import { deepEqual, notDeepStrictEqual,ok } from 'node:assert'
+import { deepEqual, notDeepStrictEqual, ok } from 'node:assert'
 import api from '../api.js'
 
 let app = {}
 
 const MOCK_USER = {
   email: 'viniciuslealalves@outlook.com',
-  password: '123456'
+  senha: '123456'
 }
 
 describe('Suite de testes autenticação', function() {
@@ -22,7 +22,6 @@ describe('Suite de testes autenticação', function() {
 
     const statusCode = result.statusCode
     const dados = JSON.parse(result.payload)
-
     ok(statusCode === 200)
     ok(dados.token.length > 10)
 
@@ -34,7 +33,7 @@ describe('Suite de testes autenticação', function() {
       url: '/login',
       payload: {
         email: 'email@',
-        password: '123'
+        senha: '1234'
       }
     })
     
