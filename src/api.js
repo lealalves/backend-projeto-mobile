@@ -60,7 +60,7 @@ async function main() {
     // },
     validate: (dados, request, h) => {
       // aqui posso fazer alguma validação a respeito do usuario
-      console.log('dados', dados)
+      // console.log('dados', dados)
       return {
         isValid: true
       }
