@@ -26,10 +26,11 @@ const MOCK_DEFAULT_USUARIO = {
 }
 
 const MOCK_DELETED_ID = '641140b1527a6ede09dce934'
+const MOCK_USER_EXIST_EMAIL = MOCK_DEFAULT_USUARIO.email
 
 let MOCK_USER_ID = ''
 
-describe('Suite de testes rotas usuário', function () {
+describe.only('Suite de testes rotas usuário', function () {
   this.beforeAll(async () => {
     app = await api
     const result = await app.inject({
@@ -151,7 +152,29 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(message, 'Usuário cadastrado com sucesso!')
   })
 
-  it('PATCH /users/:id - Deve atualizar um usuario pelo id', async () => {
+  it('POST /users - não deve cadastrar um usuario com email existente', async () => {
+    const result = await app.inject({
+      method: 'POST',
+      url: '/users',
+      payload: {
+        ...MOCK_CADASTRAR_USUARIO,
+        email: MOCK_USER_EXIST_EMAIL
+      }
+    })
+
+    const expectedError = {
+      statusCode: 409,
+      error: "Conflict",
+      message: "Esse e-mail já está sendo utilizado."
+    }
+    const statusCode = result.statusCode
+    const dados = JSON.parse(result.payload)
+
+    ok(statusCode === 409)
+    deepEqual(dados, expectedError)
+  })
+
+  it('PATCH /users/:id - deve atualizar um usuario pelo id', async () => {
     const MOCK_NOVO_NOME = {
       nome: 'Alves Leal'
     }
@@ -172,7 +195,7 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(message, 'Usuário atualizado com sucesso!')
   })
 
-  it('PATCH /users/:id - Não deve atualizar um usuario pelo id inexistente', async () => {
+  it('PATCH /users/:id - não deve atualizar um usuario pelo id inexistente', async () => {
     const MOCK_NOVO_NOME = {
       nome: 'Alves Leal'
     }
@@ -196,7 +219,7 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(dados, expectedError)
   })
 
-  it('PATCH /users/:id - Não deve atualizar um usuario pelo id inválido', async () => {
+  it('PATCH /users/:id - não deve atualizar um usuario pelo id inválido', async () => {
     const MOCK_INVALID_ID = '_id'
     const MOCK_NOVO_NOME = {
       nome: 'Alves Leal'
@@ -221,7 +244,7 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(dados, expectedError)
   })
 
-  it('DELETE /users/:id - Deve deletar um usuario pelo id', async () => {
+  it('DELETE /users/:id - deve deletar um usuario pelo id', async () => {
     const result = await app.inject({
       method: 'DELETE',
       headers,
@@ -238,7 +261,7 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(message, 'Usuário deletado com sucesso!')
   })
 
-  it('DELETE /users/:id - Não deve deletar um usuario por um id inexistente', async () => {
+  it('DELETE /users/:id - não deve deletar um usuario por um id inexistente', async () => {
     const result = await app.inject({
       method: 'DELETE',
       headers,
@@ -257,7 +280,7 @@ describe('Suite de testes rotas usuário', function () {
     deepEqual(dados, expectedError)
   })
 
-  it('DELETE /users/:id - Não deve deletar um usuario por um id inválido', async () => {
+  it('DELETE /users/:id - não deve deletar um usuario por um id inválido', async () => {
     const MOCK_INVALID_ID = '_id'
     const result = await app.inject({
       method: 'DELETE',
