@@ -2,10 +2,7 @@ import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
 import Boom from '@hapi/boom'
 import passwordHelper from '../helpers/passwordHelper.js'
-
-const failAction = (request, headers, error) => {
-  throw error
-}
+import failAction from '../helpers/failAction.js'
 
 const headers = Joi.object({
   authorization: Joi.string().required()
@@ -45,6 +42,9 @@ export default class userRoutes extends baseRoute{
             senha
           } = request.payload
 
+          const [emailExist] = await this.db.listar({email: email})
+          if(emailExist) return Boom.conflict('Esse e-mail já está sendo utilizado.')
+
           const novaSenha = await passwordHelper.hashPassword(senha)
 
           const result = await this.db.cadastrar({nome, email, cpf, telefone, senha: novaSenha})
@@ -54,6 +54,7 @@ export default class userRoutes extends baseRoute{
             _id: result._id
           }
         } catch (error) {
+          console.log(error);
           return Boom.internal()
         }
       }

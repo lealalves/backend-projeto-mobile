@@ -3,12 +3,7 @@ import Joi from 'joi'
 import Boom from '@hapi/boom'
 import Jwt  from 'jsonwebtoken'
 import passwordHelper from '../helpers/passwordHelper.js'
-
-
-const failAction = (request, headers, error) => {
-  let errors = error.output.payload.validation.keys[0]
-  throw Boom.badRequest(`o campo ${errors} não é permitido estar vazio.`)
-}
+import failAction from '../helpers/failAction.js'
 
 export default class authRoutes extends baseRoute {
   constructor(secret, db) {

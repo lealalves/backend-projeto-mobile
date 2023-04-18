@@ -5,10 +5,7 @@ import Jwt  from 'jsonwebtoken'
 import baseRoute from './base/baseRoute.js'
 import Joi from 'joi'
 import Boom from '@hapi/boom'
-
-const failAction = (request, headers, error) => {
-  throw error
-}
+import failAction from '../helpers/failAction.js'
 
 const headers = Joi.object({
   authorization: Joi.string().required()
