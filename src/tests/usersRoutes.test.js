@@ -30,7 +30,7 @@ const MOCK_USER_EXIST_EMAIL = MOCK_DEFAULT_USUARIO.email
 
 let MOCK_USER_ID = ''
 
-describe.only('Suite de testes rotas usuário', function () {
+describe('Suite de testes rotas usuário', function () {
   this.beforeAll(async () => {
     app = await api
     const result = await app.inject({
@@ -152,7 +152,7 @@ describe.only('Suite de testes rotas usuário', function () {
     deepEqual(message, 'Usuário cadastrado com sucesso!')
   })
 
-  it('POST /users - não deve cadastrar um usuario com email existente', async () => {
+  it('POST /users - não deve cadastrar um usuario com um email já cadastrado', async () => {
     const result = await app.inject({
       method: 'POST',
       url: '/users',
